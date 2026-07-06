@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+.DS_Store
+*.log
+
+# Client build output (served by API in some deploy setups)
+client/dist/
+
+.vercel
+.env*
