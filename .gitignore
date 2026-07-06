@@ -1,12 +1,18 @@
 node_modules/
 dist/
+server/dist/
 .env
 .env.local
 .DS_Store
 *.log
 
-# Client build output (served by API in some deploy setups)
+# Client build output
 client/dist/
 
-.vercel
-.env*
+# Vercel
+.vercel/
+
+# Python cache
+__pycache__/
+*.pyc
+
