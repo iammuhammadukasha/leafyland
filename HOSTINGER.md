@@ -31,7 +31,6 @@ If Hostinger does not auto-detect, use:
 | **Framework** | Other (if NestJS auto-detect causes issues) |
 | **Output directory** | `.` |
 | **Entry file** | `index.js` |
-| **Start command** | `node server/dist/start-hostinger.js` |
 
 Equivalent scripts in `package.json`:
 
