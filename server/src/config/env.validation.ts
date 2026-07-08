@@ -52,7 +52,7 @@ class EnvironmentVariables {
 }
 
 export function validateEnv(config: Record<string, unknown>) {
-  const withDefaults = {
+  const withDefaults: Record<string, unknown> = {
     NODE_ENV: 'production',
     API_PREFIX: 'api',
     APP_VERSION: '0.1.0',
@@ -60,7 +60,6 @@ export function validateEnv(config: Record<string, unknown>) {
     ...config,
   };
 
-  // Hostinger injects PORT at runtime — never default over it.
   if (!withDefaults.PORT && process.env.PORT) {
     withDefaults.PORT = process.env.PORT;
   }
