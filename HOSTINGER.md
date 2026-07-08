@@ -23,7 +23,7 @@ If Hostinger does not auto-detect, use:
 
 | Setting | Value |
 |---------|--------|
-| **Node.js version** | 20.x |
+| **Node.js version** | 22.x (or 20.x) |
 | **Root directory** | `.` (repository root) |
 | **Install command** | `npm install` (runs `postinstall` → installs `server/` + `client/` deps) |
 | **Build command** | `npm run build` |
