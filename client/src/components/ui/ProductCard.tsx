@@ -1,29 +1,42 @@
-import type { Product } from '../../data/homeData'
-import { Icon } from './primitives'
+import { Link } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
+import type { Product } from '../../data/homeData';
+import { Icon } from './primitives';
 
 export function ProductCard({ product }: { product: Product }) {
-  const discount = product.oldPrice - product.price
+  const { add, openDrawer } = useCart();
+  const discount = product.oldPrice - product.price;
+  const productId = product.slug ?? product.name.toLowerCase().replace(/\s+/g, '-');
+  const detailTo = product.slug ? `/products/${product.slug}` : `/products?q=${encodeURIComponent(product.name)}`;
+
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    add({ productId, name: product.name, price: product.price, image: product.image });
+    openDrawer();
+  };
 
   return (
     <article className="min-w-[200px] md:min-w-[220px] bg-white border border-[#E5E5E5] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex-shrink-0">
-      <div className="relative h-40 bg-[#f7f7f7] overflow-hidden">
+      <Link to={detailTo} className="block relative h-40 bg-[#f7f7f7] overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
           onError={(e) => {
-            e.currentTarget.src = '/images/nursery.jpg'
+            e.currentTarget.src = '/images/nursery.jpg';
           }}
         />
         <button
           type="button"
-          className="absolute top-2 right-2 bg-white border-2 border-primary text-black font-bold text-xs px-3 py-1 rounded-lg hover:bg-primary hover:text-white transition-colors"
+          onClick={handleAdd}
+          className="absolute top-2 right-2 bg-white border-2 border-primary text-black font-bold text-xs px-3 py-1 rounded-lg hover:bg-primary hover:text-white transition-colors z-10"
         >
           ADD
         </button>
-      </div>
-      <div className="p-3 md:p-4 space-y-1.5">
+      </Link>
+      <Link to={detailTo} className="block p-3 md:p-4 space-y-1.5">
         <span className="inline-block bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded">
           ₹{product.price}
         </span>
@@ -42,7 +55,7 @@ export function ProductCard({ product }: { product: Product }) {
             {product.rating} ({product.reviews})
           </span>
         </div>
-      </div>
+      </Link>
     </article>
-  )
+  );
 }

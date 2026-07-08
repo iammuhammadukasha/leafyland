@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  supabaseId String   @unique
+  email      String   @unique
+  name       String?
+  phone      String?
+  role       String   @default("CUSTOMER")
+  vendor     Vendor?
+  orders     Order[]
+  bookings   ServiceBooking[]
+  createdAt  DateTime @default(now())
+}
+
+model Vendor {
+  id        String    @id @default(cuid())
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shopName  String
+  approved  Boolean   @default(false)
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  name      String
+  slug      String     @unique
+  type      String
+  image     String?
+  sortOrder Int        @default(0)
+  parentId  String?
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Category[] @relation("CategoryTree")
+  products  Product[]
+  createdAt DateTime   @default(now())
+}
+
+model Product {
+  id           String      @id @default(cuid())
+  name         String
+  slug         String      @unique
+  description  String
+  price        Float
+  comparePrice Float?
+  stock        Int         @default(0)
+  images       String      @default("[]")
+  unit         String?
+  status       String      @default("DRAFT")
+  categoryId   String
+  category     Category    @relation(fields: [categoryId], references: [id])
+  vendorId     String?
+  vendor       Vendor?     @relation(fields: [vendorId], references: [id])
+  orderItems   OrderItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Service {
+  id          String           @id @default(cuid())
+  name        String
+  slug        String           @unique
+  description String
+  price       Float
+  image       String?
+  status      String           @default("PUBLISHED")
+  bookings    ServiceBooking[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model ServiceBooking {
+  id                String   @id @default(cuid())
+  serviceId         String
+  service           Service  @relation(fields: [serviceId], references: [id])
+  customerId        String?
+  customer          User?    @relation(fields: [customerId], references: [id])
+  customerName      String
+  customerEmail     String
+  customerPhone     String
+  bookingDate       String
+  timeSlot          String
+  addressLine1      String
+  city              String
+  pincode           String
+  amount            Float
+  status            String   @default("PENDING")
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  createdAt         DateTime @default(now())
+}
+
+model ShippingZone {
+  id        String  @id @default(cuid())
+  name      String
+  pinPrefix String  @default("")
+  flatRate  Float   @default(99)
+  freeAbove Float?
+  isDefault Boolean @default(false)
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  orderNumber       String      @unique
+  customerId        String?
+  customer          User?       @relation(fields: [customerId], references: [id])
+  customerName      String
+  customerEmail     String
+  customerPhone     String
+  addressLine1      String
+  addressLine2      String?
+  city              String
+  state             String      @default("")
+  pincode           String
+  subtotal          Float
+  shippingFee       Float
+  gstAmount         Float
+  total             Float
+  status            String      @default("PENDING")
+  razorpayOrderId   String?
+  razorpayPaymentId String?
+  items             OrderItem[]
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  name      String
+  price     Float
+  quantity  Int
+}

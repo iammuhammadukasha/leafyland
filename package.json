@@ -1,17 +1,24 @@
 {
   "name": "leafyland",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix client\" \"npm run dev --prefix server\"",
     "dev:client": "npm run dev --prefix client",
     "dev:server": "npm run dev --prefix server",
-    "build": "npm run build --prefix client && npm run build --prefix server",
+    "postinstall": "npm install --prefix server && npm install --prefix client --include=dev",
+    "build": "npm run db:generate --prefix server && node scripts/hostinger-client-env.mjs && npm run build --prefix client && npm run build --prefix server",
     "build:server": "npm run build --prefix server",
     "start": "npm run start:prod --prefix server",
-    "db:up": "docker compose up -d postgres",
-    "db:down": "docker compose down",
-    "db:logs": "docker compose logs -f postgres",
-    "vercel-build": "npm install --prefix client && npm install --prefix server && npm run build --prefix client"
+    "hostinger-build": "npm run build",
+    "hostinger-start": "npm run start:prod --prefix server",
+    "db:push": "npm run db:push --prefix server",
+    "db:seed": "npm run db:seed --prefix server",
+    "db:generate": "npm run db:generate --prefix server",
+    "setup:supabase": "node scripts/complete-supabase-setup.mjs",
+    "vercel-build": "npm install --prefix server && npm run db:generate --prefix server && npm install --prefix client --include=dev && npm run build --prefix client"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"

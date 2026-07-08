@@ -15,11 +15,10 @@ async function bootstrap(): Promise<Express> {
   const config = app.get(ConfigService);
 
   const apiPrefix = config.get<string>('app.apiPrefix', 'api');
-  const nodeEnv = config.get<string>('app.nodeEnv', 'development');
 
   app.setGlobalPrefix(apiPrefix);
   app.enableCors({
-    origin: nodeEnv === 'production' ? false : true,
+    origin: true,
     credentials: true,
   });
 

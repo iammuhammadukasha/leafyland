@@ -1,24 +1,28 @@
 import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DatabaseService } from '../database/database.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Controller()
 export class HealthController {
   constructor(
-    private readonly database: DatabaseService,
+    private readonly prisma: PrismaService,
     private readonly config: ConfigService,
   ) {}
 
   @Get('health')
   async health() {
-    const db = await this.database.ping();
-    const status = db.status === 'connected' ? 'ok' : 'degraded';
+    let dbStatus = 'connected';
+    try {
+      await this.prisma.$queryRaw`SELECT 1`;
+    } catch {
+      dbStatus = 'disconnected';
+    }
 
     return {
-      status,
+      status: dbStatus === 'connected' ? 'ok' : 'degraded',
       service: 'leafyland-api',
       timestamp: new Date().toISOString(),
-      database: db,
+      database: { status: dbStatus },
     };
   }
 

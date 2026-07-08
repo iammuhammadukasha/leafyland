@@ -3,19 +3,38 @@ import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import { validateEnv } from './config/env.validation';
-import { DatabaseModule } from './database/database.module';
+import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
+import { AuthModule } from './auth/auth.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
+import { ServicesModule } from './services/services.module';
+import { BookingsModule } from './bookings/bookings.module';
+import { OrdersModule } from './orders/orders.module';
+import { UploadModule } from './upload/upload.module';
+import { AdminModule } from './admin/admin.module';
+import { SupabaseModule } from './supabase/supabase.module';
+import supabaseConfig from './config/supabase.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
-      load: [appConfig, databaseConfig],
+      load: [appConfig, databaseConfig, supabaseConfig],
       validate: validateEnv,
     }),
-    DatabaseModule,
+    SupabaseModule,
+    PrismaModule,
     HealthModule,
+    AuthModule,
+    CategoriesModule,
+    ProductsModule,
+    ServicesModule,
+    BookingsModule,
+    OrdersModule,
+    UploadModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

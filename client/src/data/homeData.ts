@@ -43,15 +43,15 @@ export const SERVICE_PILLS = [
 
 export const SHOP_CATEGORIES = [
   { label: 'Plants', image: IMAGES.monstera },
-  { label: 'Seeds & Bulbs', image: IMAGES.farming },
+  { label: 'Seeds & Bulbs', image: IMAGES.seeds },
   { label: 'Soil & Fertilizers', image: IMAGES.vermicompost },
-  { label: 'Garden Tools', image: IMAGES.pruningShears },
+  { label: 'Garden Tools', image: IMAGES.gardenTools },
   { label: 'Solar', image: IMAGES.ecoProducts },
   { label: 'Eco Products', image: IMAGES.organicFood },
   { label: 'Electrical', image: IMAGES.corporateProject },
   { label: 'Plumbing', image: IMAGES.dripInstall },
   { label: 'Paint', image: IMAGES.villaProject },
-  { label: 'Home Essentials', image: IMAGES.peaceLily },
+  { label: 'Home Essentials', image: IMAGES.mindfulMorning },
   { label: 'Furniture', image: IMAGES.realEstate },
   { label: 'Ayurvedic', image: IMAGES.ayurveda },
 ] as const
@@ -103,6 +103,7 @@ export const DISCOVER_HUBS = [
 
 export type Product = {
   name: string
+  slug?: string
   price: number
   oldPrice: number
   image: string
@@ -116,28 +117,26 @@ export const PRODUCT_SHELVES: { title: string; items: Product[] }[] = [
   {
     title: 'Trending Plants',
     items: [
-      { name: 'Peace Lily', price: 299, oldPrice: 399, image: IMAGES.peaceLily, tag: 'Air Purifying', rating: 4.8, reviews: '2.3k', unit: '1 plant (6" pot)' },
-      { name: 'Snake Plant', price: 199, oldPrice: 299, image: IMAGES.snakePlant, tag: 'Low Light', rating: 4.9, reviews: '1.8k', unit: '1 plant (5" pot)' },
-      { name: 'Monstera Deliciosa', price: 599, oldPrice: 799, image: IMAGES.monstera, tag: 'Popular', rating: 4.7, reviews: '956', unit: '1 plant (8" pot)' },
-      { name: 'Areca Palm', price: 449, oldPrice: 599, image: IMAGES.heroPlants, tag: 'Indoor', rating: 4.6, reviews: '720', unit: '1 plant (10" pot)' },
+      { name: 'Peace Lily', slug: 'peace-lily', price: 299, oldPrice: 399, image: IMAGES.peaceLily, tag: 'Air Purifying', rating: 4.8, reviews: '2.3k', unit: '1 plant (6" pot)' },
+      { name: 'Snake Plant', slug: 'snake-plant', price: 199, oldPrice: 299, image: IMAGES.snakePlant, tag: 'Low Light', rating: 4.9, reviews: '1.8k', unit: '1 plant (5" pot)' },
+      { name: 'Money Plant', slug: 'money-plant', price: 149, oldPrice: 199, image: IMAGES.plantShelf, tag: 'Popular', rating: 4.7, reviews: '956', unit: '1 plant (4" pot)' },
     ],
   },
   {
     title: 'Soil & Fertilizers',
     items: [
-      { name: 'Vermicompost 5kg', price: 149, oldPrice: 249, image: IMAGES.vermicompost, tag: 'Organic', rating: 4.6, reviews: '3.1k', unit: '5 kg bag' },
-      { name: 'Coco Peat Block', price: 89, oldPrice: 120, image: IMAGES.soilTesting, tag: 'Eco', rating: 4.5, reviews: '890', unit: '1 block (5 kg)' },
-      { name: 'NPK Fertilizer', price: 199, oldPrice: 279, image: IMAGES.farming, tag: 'Garden', rating: 4.4, reviews: '1.2k', unit: '1 kg pack' },
-      { name: 'Potting Mix Premium', price: 249, oldPrice: 349, image: IMAGES.vermicompost, tag: 'Ready Mix', rating: 4.7, reviews: '2.4k', unit: '10 kg bag' },
+      { name: 'Vermicompost 5kg', slug: 'vermicompost-5kg', price: 149, oldPrice: 249, image: IMAGES.vermicompost, tag: 'Organic', rating: 4.6, reviews: '3.1k', unit: '5 kg bag' },
+      { name: 'NPK Fertilizer', slug: 'npk-fertilizer-19-19-19', price: 199, oldPrice: 279, image: IMAGES.npkFertilizer, tag: 'Garden', rating: 4.4, reviews: '1.2k', unit: '1 kg pack' },
+      { name: 'Potting Mix Premium', slug: 'potting-mix-premium', price: 249, oldPrice: 349, image: IMAGES.pottingSoil, tag: 'Ready Mix', rating: 4.7, reviews: '2.4k', unit: '10 kg bag' },
     ],
   },
   {
     title: 'Garden Tools & Irrigation',
     items: [
-      { name: 'Pruning Shears', price: 349, oldPrice: 499, image: IMAGES.pruningShears, tag: 'Pro Grade', rating: 4.5, reviews: '640', unit: '1 pc' },
-      { name: 'Garden Hose 30m', price: 599, oldPrice: 799, image: IMAGES.gardenHose, tag: 'Durable', rating: 4.3, reviews: '410', unit: '30 metre' },
-      { name: 'Drip Kit Starter', price: 899, oldPrice: 1199, image: IMAGES.dripInstall, tag: 'Water Saving', rating: 4.6, reviews: '380', unit: '50 plants' },
-      { name: 'Sprinkler Set', price: 449, oldPrice: 599, image: IMAGES.lawnMowing, tag: 'Adjustable', rating: 4.4, reviews: '290', unit: '1 set' },
+      { name: 'Pruning Shears', slug: 'pruning-shears-pro', price: 349, oldPrice: 499, image: IMAGES.pruningShears, tag: 'Pro Grade', rating: 4.5, reviews: '640', unit: '1 pc' },
+      { name: 'Garden Hose 30m', slug: 'garden-hose-30m', price: 599, oldPrice: 799, image: IMAGES.gardenHose, tag: 'Durable', rating: 4.3, reviews: '410', unit: '30 metre' },
+      { name: 'Drip Irrigation Kit', slug: 'drip-irrigation-kit', price: 599, oldPrice: 799, image: IMAGES.dripInstall, tag: 'Water Saving', rating: 4.6, reviews: '380', unit: '1 kit' },
+      { name: 'Adjustable Sprinkler', slug: 'adjustable-sprinkler', price: 349, oldPrice: 449, image: IMAGES.sprinkler, tag: 'Adjustable', rating: 4.4, reviews: '290', unit: '1 pc' },
     ],
   },
 ]
@@ -154,12 +153,12 @@ export const VENDORS = [
 ] as const
 
 export const MOST_BOOKED = [
-  { name: 'Garden Maintenance', price: '₹1,200/visit', rating: 4.85, reviews: '12K', image: IMAGES.gardenMaintenance },
-  { name: 'Drip Installation', price: '₹2,500', rating: 4.82, reviews: '8.4K', image: IMAGES.dripInstall },
-  { name: 'Lawn Mowing', price: '₹499', rating: 4.78, reviews: '6K', image: IMAGES.lawnMowing },
-  { name: 'Indoor Plant Care', price: '₹799', rating: 4.9, reviews: '5.2K', image: IMAGES.plantCare },
-  { name: 'Balcony Garden Setup', price: '₹3,500', rating: 4.87, reviews: '3.1K', image: IMAGES.balconyGarden },
-  { name: 'Soil Testing', price: '₹1,500', rating: 4.8, reviews: '2.8K', image: IMAGES.soilTesting },
+  { name: 'Garden AMC', slug: 'garden-amc', price: '₹24,999/yr', rating: 4.85, reviews: '12K', image: IMAGES.gardenMaintenance },
+  { name: 'Terrace & Balcony Garden', slug: 'terrace-balcony-garden', price: '₹6,999', rating: 4.82, reviews: '8.4K', image: IMAGES.balconyGarden },
+  { name: 'Landscape Design', slug: 'landscape-design', price: '₹4,999', rating: 4.78, reviews: '6K', image: IMAGES.landscapeDesign },
+  { name: 'Corporate Plant Rental', slug: 'corporate-plant-rental', price: '₹2,999', rating: 4.9, reviews: '5.2K', image: IMAGES.plantCare },
+  { name: 'Garden Development', slug: 'garden-development', price: '₹8,999', rating: 4.87, reviews: '3.1K', image: IMAGES.gardenMaintenance },
+  { name: 'Lawn Mowing', slug: 'lawn-mowing', price: '₹1,499', rating: 4.8, reviews: '2.8K', image: IMAGES.lawnMowing },
 ] as const
 
 export const LUXURY_SERVICES = [

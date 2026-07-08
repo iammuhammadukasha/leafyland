@@ -1,19 +1,13 @@
 import { plainToInstance } from 'class-transformer';
-import {
-  IsBooleanString,
-  IsIn,
-  IsNotEmpty,
-  IsOptional,
-  IsPort,
-  IsString,
-  validateSync,
-} from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, validateSync } from 'class-validator';
 
 class EnvironmentVariables {
-  @IsIn(['development', 'production', 'test'])
+  @IsString()
+  @IsNotEmpty()
   NODE_ENV!: string;
 
-  @IsPort()
+  @IsString()
+  @IsNotEmpty()
   PORT!: string;
 
   @IsString()
@@ -24,37 +18,37 @@ class EnvironmentVariables {
   @IsNotEmpty()
   APP_VERSION!: string;
 
-  @IsOptional()
   @IsString()
-  DATABASE_URL?: string;
-
-  @IsOptional()
-  @IsString()
-  DATABASE_HOST?: string;
-
-  @IsOptional()
-  @IsPort()
-  DATABASE_PORT?: string;
+  @IsNotEmpty()
+  DATABASE_URL!: string;
 
   @IsOptional()
   @IsString()
-  DATABASE_USER?: string;
+  DIRECT_URL?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  SUPABASE_URL!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  SUPABASE_SERVICE_ROLE_KEY!: string;
 
   @IsOptional()
   @IsString()
-  DATABASE_PASSWORD?: string;
+  SUPABASE_STORAGE_BUCKET?: string;
 
   @IsOptional()
   @IsString()
-  DATABASE_NAME?: string;
+  RAZORPAY_KEY_ID?: string;
 
   @IsOptional()
-  @IsBooleanString()
-  DATABASE_SSL?: string;
+  @IsString()
+  RAZORPAY_KEY_SECRET?: string;
 
   @IsOptional()
-  @IsBooleanString()
-  DATABASE_REQUIRED?: string;
+  @IsString()
+  GSTIN?: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {
@@ -63,6 +57,7 @@ export function validateEnv(config: Record<string, unknown>) {
     PORT: '4000',
     API_PREFIX: 'api',
     APP_VERSION: '0.1.0',
+    SUPABASE_STORAGE_BUCKET: 'product-images',
     ...config,
   };
 
@@ -70,13 +65,9 @@ export function validateEnv(config: Record<string, unknown>) {
     enableImplicitConversion: true,
   });
 
-  const errors = validateSync(validated, {
-    skipMissingProperties: false,
-  });
-
+  const errors = validateSync(validated, { skipMissingProperties: false });
   if (errors.length > 0) {
     throw new Error(errors.toString());
   }
-
   return validated;
 }

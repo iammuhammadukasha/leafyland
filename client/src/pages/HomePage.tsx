@@ -1,18 +1,14 @@
+﻿import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
-  AMC_PLANS,
-  BOOKING_MODES,
   DAILY_SERVICES,
   DISCOVER_HUBS,
   EVENTS,
-  EXPERTS,
   FAQS,
   IMAGES,
-  LUXURY_SERVICES,
   MOST_BOOKED,
   PARTNERS,
   PRODUCT_SHELVES,
-  SERVICE_PILLS,
-  SHOP_CATEGORIES,
   SIGNATURE_PROJECTS,
   STATS,
   VENDORS,
@@ -22,80 +18,125 @@ import { ProductCard } from '../components/ui/ProductCard'
 import { ServiceCard } from '../components/ui/ServiceCard'
 import { VendorCard } from '../components/ui/VendorCard'
 import { Icon, SectionHeader, SeeAllLink } from '../components/ui/primitives'
+import { CircularQuickCategories } from '../components/home/CircularQuickCategories'
+import { MegaCategoryGrid } from '../components/home/MegaCategoryGrid'
+import { MixedFeedSection, ExpertCard, CommunityCard } from '../components/home/MixedFeedSection'
+import { VERIFIED_EXPERTS, COMMUNITIES } from '../data/mixedHomeData'
+import {
+  DAILY_SERVICE_TO,
+  DISCOVER_HUB_TO,
+  HERO_CTA_TO,
+  HOME_ROUTES,
+  PARTNER_TO,
+} from '../lib/homeLinks'
 
 export function HomePage() {
   return (
     <main className="max-w-[1440px] mx-auto px-4 lg:px-8 py-6 md:py-8 space-y-10 md:space-y-14 pb-20 md:pb-14">
       <HeroSection />
-      <ServicePillsSection />
-      <ShopCategoriesSection />
-      <DailyServicesSection />
-      <BookYourWaySection />
-      <PromoBannersSection />
-      <DiscoverHubsSection />
+      <CircularQuickCategories />
+      <MegaCategoryGrid />
+      <MixedFeedSection />
       <ProductShelvesSection />
-      <FeaturedVendorsSection />
-      <ConsultationSection />
       <MostBookedSection />
-      <LuxuryServicesSection />
-      <ExpertConsultationsSection />
-      <AMCSection />
+      <DailyServicesSection />
+      <VerifiedExpertsSection />
+      <CommunityFeedSection />
+      <FeaturedVendorsSection />
+      <DiscoverHubsSection />
+      <FranchiseSection />
       <AgricultureSection />
       <EnvironmentalSection />
       <TechnologySection />
       <GovernmentSection />
-      <FranchiseSection />
       <EventsSection />
       <SignatureProjectsSection />
       <WhyChooseSection />
+      <ConsultationSection />
       <HowItWorksSection />
       <FAQSection />
     </main>
   )
 }
 
+function VerifiedExpertsSection() {
+  return (
+    <section className="border-t border-[#E5E5E5] pt-10">
+      <SectionHeader title="Verified Experts" action={<SeeAllLink to={HOME_ROUTES.contact} label="View All" />} />
+      <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+        {VERIFIED_EXPERTS.map((e) => (
+          <ExpertCard key={e.name} {...e} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function CommunityFeedSection() {
+  return (
+    <section>
+      <SectionHeader title="Community" action={<SeeAllLink to={HOME_ROUTES.contact} label="Explore" />} />
+      <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+        {COMMUNITIES.map((c) => (
+          <CommunityCard key={c.name} {...c} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
 function HeroSection() {
+  const navigate = useNavigate()
+  const [query, setQuery] = useState('')
+
+  const onSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    navigate(query.trim() ? `/products?q=${encodeURIComponent(query.trim())}` : '/products')
+  }
+
   return (
     <section className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 min-h-0 lg:min-h-[520px]">
       <div className="lg:w-[55%] flex flex-col gap-4">
-        <span className="text-xs font-bold text-black tracking-widest uppercase">Integrated Green Ecosystem</span>
+        <span className="text-xs font-bold text-black tracking-widest uppercase">Green Super Marketplace</span>
         <h1 className="text-3xl md:text-5xl font-extrabold text-primary leading-tight">
-          Products, Services &amp; Sustainability
+          Shop, Hire Experts &amp; Grow — All in One
         </h1>
         <p className="text-base md:text-lg text-black max-w-xl leading-relaxed">
-          India&apos;s largest green marketplace — buy plants, book landscaping services, hire daily gardeners, and access
-          corporate sustainability solutions.
+          Products, services, verified professionals, communities &amp; franchise — India&apos;s integrated green ecosystem.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 mt-2">
+        <form onSubmit={onSearch} className="flex flex-col sm:flex-row gap-3 mt-2">
           <input
             type="search"
-            placeholder="What are you looking for today?"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search products, services, experts…"
             className="flex-1 h-12 px-4 border border-[#E5E5E5] rounded-lg text-sm text-black placeholder:text-black/50 focus:border-primary focus:ring-1 focus:ring-primary outline-none"
           />
-          <button type="button" className="bg-primary text-white font-bold px-6 h-12 rounded-lg hover:bg-primary-hover transition-colors">
+          <button type="submit" className="bg-primary text-white font-bold px-6 h-12 rounded-lg hover:bg-primary-hover transition-colors">
             Search
           </button>
-          <button
-            type="button"
+          <Link
+            to="/products"
             className="border border-primary text-black font-bold px-6 h-12 rounded-lg hover:bg-primary/5 transition-colors flex items-center justify-center gap-2"
           >
-            <Icon name="near_me" className="text-lg" /> Nearby
-          </button>
-        </div>
+            <Icon name="near_me" className="text-lg" /> Browse
+          </Link>
+        </form>
 
         <div className="flex flex-wrap gap-2 md:gap-3">
-          <button type="button" className="bg-primary text-white font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-primary-hover transition-colors">
-            Get Free Quote
-          </button>
-          {['Explore Services', 'Join Network', 'Corporate Solutions'].map((label) => (
-            <button
+          {Object.entries(HERO_CTA_TO).map(([label, to]) => (
+            <Link
               key={label}
-              type="button"
-              className="border border-primary text-black font-bold px-5 py-2.5 rounded-lg text-sm hover:bg-primary/5 transition-colors"
+              to={to}
+              className={`font-bold px-5 py-2.5 rounded-lg text-sm transition-colors ${
+                label === 'Get Free Quote'
+                  ? 'bg-primary text-white hover:bg-primary-hover'
+                  : 'border border-primary text-black hover:bg-primary/5'
+              }`}
             >
               {label}
-            </button>
+            </Link>
           ))}
         </div>
 
@@ -138,51 +179,6 @@ function HeroSection() {
   )
 }
 
-function ServicePillsSection() {
-  return (
-    <section>
-      <SectionHeader title="Browse Service Categories" />
-      <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
-        {SERVICE_PILLS.map((pill, i) => (
-          <button
-            key={pill}
-            type="button"
-            className={`px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap border transition-colors ${
-              i === 0 ? 'bg-primary text-white border-primary' : 'bg-white text-black border-[#E5E5E5] hover:border-primary'
-            }`}
-          >
-            {pill}
-          </button>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function ShopCategoriesSection() {
-  return (
-    <section>
-      <SectionHeader title="Shop by Product Category" action={<SeeAllLink />} />
-      <div className="flex gap-4 md:gap-6 overflow-x-auto hide-scrollbar pb-2">
-        {SHOP_CATEGORIES.map((cat, i) => (
-          <button key={cat.label} type="button" className="flex flex-col items-center gap-2 min-w-[72px] flex-shrink-0 group">
-            <div
-              className={`w-16 h-16 md:w-[72px] md:h-[72px] rounded-full overflow-hidden border-2 ${
-                i === 0 ? 'border-primary' : 'border-[#E5E5E5] group-hover:border-primary'
-              }`}
-            >
-              <img src={cat.image} alt={cat.label} className="w-full h-full object-cover" />
-            </div>
-            <span className="text-[11px] md:text-xs font-semibold text-black text-center leading-tight max-w-[80px]">
-              {cat.label}
-            </span>
-          </button>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 function DailyServicesSection() {
   return (
     <section>
@@ -192,62 +188,15 @@ function DailyServicesSection() {
       />
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
         {DAILY_SERVICES.map((s) => (
-          <button
+          <Link
             key={s.name}
-            type="button"
+            to={DAILY_SERVICE_TO}
             className="bg-white border border-[#E5E5E5] p-3 md:p-4 rounded-xl flex flex-col items-center gap-2 hover:border-primary hover:shadow-sm transition-all group"
           >
             <Icon name={s.icon} className="text-primary text-2xl md:text-3xl group-hover:scale-110 transition-transform" />
             <span className="text-[10px] md:text-xs font-bold text-black text-center leading-tight">{s.name}</span>
-          </button>
+          </Link>
         ))}
-      </div>
-    </section>
-  )
-}
-
-function BookYourWaySection() {
-  return (
-    <section>
-      <SectionHeader title="Book Your Way" />
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-        {BOOKING_MODES.map((mode) => (
-          <div key={mode.title} className="bg-white border border-[#E5E5E5] p-4 md:p-5 rounded-xl space-y-2 hover:border-primary transition-colors">
-            <Icon name={mode.icon} className="text-primary text-3xl" />
-            <h3 className="text-sm font-bold text-primary">{mode.title}</h3>
-            <p className="text-xs text-black">{mode.desc}</p>
-            <a href="#" className="text-xs font-bold text-primary inline-flex items-center gap-0.5 hover:underline">
-              {mode.cta} <Icon name="arrow_forward" className="text-sm" />
-            </a>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function PromoBannersSection() {
-  return (
-    <section className="grid md:grid-cols-2 gap-4">
-      <div className="bg-white border border-[#E5E5E5] border-l-4 border-l-primary p-6 md:p-8 rounded-xl">
-        <h3 className="text-lg md:text-xl font-bold text-primary mb-3">ALL NEW LEAFYLAND EXPERIENCE</h3>
-        <ul className="space-y-2 text-sm text-black mb-5">
-          {['Verified Vendors', 'Free Consultation', 'Pan-India Delivery', 'Bulk Orders Welcome'].map((item) => (
-            <li key={item} className="flex items-center gap-2">
-              <Icon name="check_circle" className="text-primary text-lg" /> {item}
-            </li>
-          ))}
-        </ul>
-        <button type="button" className="bg-primary text-white font-bold px-6 py-2.5 rounded-lg text-sm">
-          Get Free Quote
-        </button>
-      </div>
-      <div className="bg-white border border-[#E5E5E5] border-l-4 border-l-primary p-6 md:p-8 rounded-xl">
-        <h3 className="text-lg md:text-xl font-bold text-primary mb-3">Corporate &amp; Government Bulk Supply</h3>
-        <p className="text-sm text-black mb-5">10 to 10,00,000 units. Tender-compliant delivery with full documentation.</p>
-        <button type="button" className="bg-primary text-white font-bold px-6 py-2.5 rounded-lg text-sm">
-          Request DPR Quote
-        </button>
       </div>
     </section>
   )
@@ -262,9 +211,10 @@ function DiscoverHubsSection() {
       />
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {DISCOVER_HUBS.map((hub) => (
-          <article
+          <Link
             key={hub.title}
-            className="bg-white border border-[#E5E5E5] rounded-xl overflow-hidden hover:shadow-md transition-shadow group cursor-pointer"
+            to={DISCOVER_HUB_TO[hub.title] ?? HOME_ROUTES.products}
+            className="bg-white border border-[#E5E5E5] rounded-xl overflow-hidden hover:shadow-md transition-shadow group"
           >
             <div className="h-40 overflow-hidden">
               <img src={hub.image} alt={hub.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
@@ -276,7 +226,7 @@ function DiscoverHubsSection() {
                 Explore <Icon name="arrow_forward" className="text-sm" />
               </span>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>
@@ -285,10 +235,11 @@ function DiscoverHubsSection() {
 
 function ProductShelvesSection() {
   return (
-    <section className="space-y-8">
+    <section className="space-y-8 border-t border-[#E5E5E5] pt-10">
+      <SectionHeader title="Trending Products" action={<SeeAllLink to={HOME_ROUTES.products} />} />
       {PRODUCT_SHELVES.map((shelf) => (
         <div key={shelf.title}>
-          <SectionHeader title={shelf.title} action={<SeeAllLink />} />
+          <h3 className="text-base font-semibold text-ink mb-3">{shelf.title}</h3>
           <div className="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar pb-2">
             {shelf.items.map((p) => (
               <ProductCard key={p.name} product={p} />
@@ -309,10 +260,10 @@ function FeaturedVendorsSection() {
           <p className="text-sm text-black mt-1">8 verified vendors near you</p>
         </div>
         <div className="flex gap-2">
-          <button type="button" className="border border-primary text-black font-bold px-4 py-2 rounded-lg text-sm hover:bg-primary/5 transition-colors">
+          <Link to={HOME_ROUTES.signup} className="border border-primary text-black font-bold px-4 py-2 rounded-lg text-sm hover:bg-primary/5 transition-colors">
             Become a Vendor
-          </button>
-          <SeeAllLink label="View All Vendors" />
+          </Link>
+          <SeeAllLink label="View All Vendors" to={HOME_ROUTES.signup} />
         </div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -325,6 +276,15 @@ function FeaturedVendorsSection() {
 }
 
 function ConsultationSection() {
+  const navigate = useNavigate()
+  const [submitted, setSubmitted] = useState(false)
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitted(true)
+    setTimeout(() => navigate(HOME_ROUTES.contact), 800)
+  }
+
   return (
     <section className="border-t border-[#E5E5E5] pt-10 md:pt-14">
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
@@ -334,12 +294,12 @@ function ConsultationSection() {
             Whether you need landscaping, agriculture support, or enterprise solutions — our experts will connect within 24 hours.
           </p>
           <div className="space-y-3 text-black">
-            <p className="flex items-center gap-2 font-medium">
+            <a href="tel:+919867909355" className="flex items-center gap-2 font-medium hover:text-primary">
               <Icon name="call" className="text-primary" /> +91 98679 09355
-            </p>
-            <p className="flex items-center gap-2 font-medium">
+            </a>
+            <a href="mailto:hello@leafyland.com" className="flex items-center gap-2 font-medium hover:text-primary">
               <Icon name="mail" className="text-primary" /> hello@leafyland.com
-            </p>
+            </a>
             <a
               href="https://wa.me/919867909355"
               target="_blank"
@@ -350,7 +310,7 @@ function ConsultationSection() {
             </a>
           </div>
         </div>
-        <form className="bg-white border border-[#E5E5E5] rounded-xl p-6 md:p-8 shadow-sm space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="bg-white border border-[#E5E5E5] rounded-xl p-6 md:p-8 shadow-sm space-y-4" onSubmit={onSubmit}>
           {[
             { label: 'Your Name', type: 'text', placeholder: 'Full name' },
             { label: 'Phone', type: 'tel', placeholder: '+91' },
@@ -376,9 +336,9 @@ function ConsultationSection() {
             </select>
           </div>
           <button type="submit" className="w-full bg-primary text-white font-bold py-3.5 rounded-lg hover:bg-primary-hover transition-colors">
-            Submit Enquiry
+            {submitted ? 'Redirecting…' : 'Submit Enquiry'}
           </button>
-          <p className="text-xs text-black">By submitting, you agree to our privacy policy.</p>
+          <p className="text-xs text-black">By submitting, you agree to our <Link to="/privacy" className="text-primary hover:underline">privacy policy</Link>.</p>
         </form>
       </div>
     </section>
@@ -387,79 +347,11 @@ function ConsultationSection() {
 
 function MostBookedSection() {
   return (
-    <section className="border-t border-[#E5E5E5] pt-10">
-      <SectionHeader title="Most Booked Services" action={<SeeAllLink />} />
+    <section>
+      <SectionHeader title="Popular Services" action={<SeeAllLink to={HOME_ROUTES.services} />} />
       <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
         {MOST_BOOKED.map((s) => (
           <ServiceCard key={s.name} {...s} />
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function LuxuryServicesSection() {
-  return (
-    <section className="border-t border-[#E5E5E5] pt-10">
-      <SectionHeader title="Luxury Landscape Design Services" subtitle="Premium design solutions for elite properties" />
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        {LUXURY_SERVICES.map((s) => (
-          <article key={s.title} className="bg-white border border-[#E5E5E5] p-5 md:p-6 rounded-xl hover:border-primary transition-colors cursor-pointer group">
-            <h3 className="text-lg font-bold text-primary mb-2">{s.title}</h3>
-            <p className="text-sm text-black mb-4">{s.desc}</p>
-            <div className="flex items-center justify-between pt-4 border-t border-[#f0f0f0]">
-              <span className="text-sm font-bold text-black">From {s.price}</span>
-              <Icon name="arrow_forward" className="text-primary group-hover:translate-x-1 transition-transform" />
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function ExpertConsultationsSection() {
-  return (
-    <section className="border-t border-[#E5E5E5] pt-10">
-      <SectionHeader title="Book Expert Consultation" />
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-        {EXPERTS.map((e) => (
-          <div key={e.role} className="bg-white border border-[#E5E5E5] p-4 rounded-xl flex flex-col justify-between hover:border-primary transition-colors">
-            <h3 className="text-sm font-bold text-primary mb-1">{e.role}</h3>
-            <p className="text-sm font-semibold text-black mb-4">{e.price}</p>
-            <button type="button" className="w-full border border-primary text-primary font-bold py-2 rounded-lg text-xs hover:bg-primary hover:text-white transition-colors">
-              Book Now
-            </button>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function AMCSection() {
-  return (
-    <section className="border-t border-[#E5E5E5] pt-10">
-      <SectionHeader title="AMC Maintenance Plans" />
-      <div className="grid md:grid-cols-3 gap-6">
-        {AMC_PLANS.map((plan) => (
-          <div key={plan.title} className="bg-white border border-[#E5E5E5] p-6 md:p-8 rounded-xl shadow-sm flex flex-col">
-            <h3 className="text-lg font-bold text-primary mb-1">{plan.title}</h3>
-            <div className="text-3xl font-bold text-black mb-4">
-              {plan.price}
-              <span className="text-base font-normal text-black">{plan.period}</span>
-            </div>
-            <ul className="space-y-2 flex-grow mb-6">
-              {plan.features.map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-black">
-                  <Icon name="check_circle" className="text-primary text-lg" /> {f}
-                </li>
-              ))}
-            </ul>
-            <button type="button" className="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary-hover transition-colors">
-              Get AMC Quote
-            </button>
-          </div>
         ))}
       </div>
     </section>
@@ -478,13 +370,13 @@ function AgricultureSection() {
       <SectionHeader title="Empowering India's Farmers" />
       <div className="grid sm:grid-cols-2 gap-4">
         {items.map((item) => (
-          <div key={item.title} className="flex gap-4 p-4 border border-[#E5E5E5] rounded-xl hover:border-primary transition-colors">
+          <Link key={item.title} to={HOME_ROUTES.services} className="flex gap-4 p-4 border border-[#E5E5E5] rounded-xl hover:border-primary transition-colors">
             <Icon name={item.icon} className="text-primary text-3xl shrink-0" />
             <div>
               <h3 className="text-sm font-bold text-primary">{item.title}</h3>
               <p className="text-sm text-black mt-1">{item.desc}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
@@ -498,9 +390,9 @@ function EnvironmentalSection() {
       <SectionHeader title="Environmental Solutions for a Sustainable Future" />
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {items.map((title) => (
-          <div key={title} className="bg-white border border-[#E5E5E5] p-4 rounded-xl hover:border-primary transition-colors cursor-pointer">
+          <Link key={title} to={HOME_ROUTES.contact} className="bg-white border border-[#E5E5E5] p-4 rounded-xl hover:border-primary transition-colors block">
             <h3 className="text-sm font-bold text-primary">{title}</h3>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
@@ -519,10 +411,10 @@ function TechnologySection() {
       <SectionHeader title="Digital Transformation for Green Industry" />
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {items.map((item) => (
-          <div key={item.title} className="border border-[#E5E5E5] p-5 rounded-xl text-center hover:border-primary transition-colors">
+          <Link key={item.title} to={HOME_ROUTES.services} className="border border-[#E5E5E5] p-5 rounded-xl text-center hover:border-primary transition-colors block">
             <Icon name={item.icon} className="text-primary text-3xl mb-2" />
             <h3 className="text-xs md:text-sm font-bold text-primary">{item.title}</h3>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
@@ -544,19 +436,19 @@ function GovernmentSection() {
           { name: 'Medicinal Plants', price: '₹8–40' },
           { name: 'Shrubs', price: '₹10–45' },
         ].map((p) => (
-          <div key={p.name} className="bg-white border border-[#E5E5E5] p-3 rounded-xl">
+          <Link key={p.name} to="/products?category=plants" className="bg-white border border-[#E5E5E5] p-3 rounded-xl hover:border-primary transition-colors block">
             <h4 className="text-xs font-bold text-primary">{p.name}</h4>
             <p className="text-sm font-bold text-black mt-1">{p.price}</p>
-          </div>
+          </Link>
         ))}
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
-        <button type="button" className="bg-primary text-white font-bold px-6 py-3 rounded-lg flex-1">
+        <Link to={HOME_ROUTES.contact} className="bg-primary text-white font-bold px-6 py-3 rounded-lg flex-1 text-center hover:bg-primary-hover transition-colors">
           Request DPR Quote
-        </button>
-        <button type="button" className="border-2 border-primary text-black font-bold px-6 py-3 rounded-lg flex-1 hover:bg-primary/5 transition-colors">
+        </Link>
+        <Link to={HOME_ROUTES.contact} className="border-2 border-primary text-black font-bold px-6 py-3 rounded-lg flex-1 text-center hover:bg-primary/5 transition-colors">
           Contact Govt Sales Team
-        </button>
+        </Link>
       </div>
     </section>
   )
@@ -571,9 +463,9 @@ function FranchiseSection() {
           <div key={p.title} className="bg-white border border-[#E5E5E5] p-5 rounded-xl shadow-sm">
             <h3 className="text-base font-bold text-primary mb-2">{p.title}</h3>
             <p className="text-sm text-black mb-3">{p.desc}</p>
-            <a href="#" className="text-sm font-bold text-primary inline-flex items-center gap-1 hover:underline">
+            <Link to={PARTNER_TO[p.title] ?? HOME_ROUTES.contact} className="text-sm font-bold text-primary inline-flex items-center gap-1 hover:underline">
               Apply Now <Icon name="arrow_forward" className="text-sm" />
-            </a>
+            </Link>
           </div>
         ))}
       </div>
@@ -584,22 +476,22 @@ function FranchiseSection() {
 function EventsSection() {
   return (
     <section className="border-t border-[#E5E5E5] pt-10">
-      <SectionHeader title="Upcoming Events" action={<SeeAllLink label="View All" />} />
+      <SectionHeader title="Upcoming Events" action={<SeeAllLink label="View All" to={HOME_ROUTES.contact} />} />
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {EVENTS.map((e) => (
-          <article key={e.name} className="bg-white border border-[#E5E5E5] rounded-xl overflow-hidden shadow-sm group cursor-pointer hover:shadow-md transition-shadow">
-            <div className="h-36 relative overflow-hidden">
+          <article key={e.name} className="bg-white border border-[#E5E5E5] rounded-xl overflow-hidden shadow-sm group hover:shadow-md transition-shadow">
+            <Link to={HOME_ROUTES.contact} className="block h-36 relative overflow-hidden">
               <img src={e.image} alt={e.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
               <span className="absolute top-2 left-2 bg-white text-[10px] font-bold px-2 py-1 rounded text-black">{e.badge}</span>
-            </div>
+            </Link>
             <div className="p-4">
               <h3 className="text-sm font-bold text-primary">{e.name}</h3>
               <p className="text-xs text-black mt-1">{e.date}</p>
               <div className="flex items-center justify-between mt-3">
                 <span className="text-lg font-bold text-black">{e.price}</span>
-                <button type="button" className="bg-primary text-white font-bold px-3 py-1.5 rounded-lg text-xs">
+                <Link to={HOME_ROUTES.contact} className="bg-primary text-white font-bold px-3 py-1.5 rounded-lg text-xs hover:bg-primary-hover transition-colors">
                   Register
-                </button>
+                </Link>
               </div>
             </div>
           </article>
@@ -615,7 +507,7 @@ function SignatureProjectsSection() {
       <SectionHeader title="Our Signature Projects" />
       <div className="grid md:grid-cols-2 gap-6 md:gap-8">
         {SIGNATURE_PROJECTS.map((p) => (
-          <article key={p.title} className="bg-white rounded-2xl overflow-hidden border border-[#E5E5E5] shadow-sm group cursor-pointer">
+          <Link key={p.title} to={HOME_ROUTES.about} className="bg-white rounded-2xl overflow-hidden border border-[#E5E5E5] shadow-sm group block">
             <div className="h-52 md:h-64 overflow-hidden">
               <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
             </div>
@@ -627,7 +519,7 @@ function SignatureProjectsSection() {
               <h3 className="text-xl font-bold text-black">{p.title}</h3>
               <p className="text-sm text-black">{p.desc}</p>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>
@@ -679,19 +571,33 @@ function HowItWorksSection() {
 }
 
 function FAQSection() {
+  const [open, setOpen] = useState<number | null>(null)
+
   return (
     <section className="border-t border-[#E5E5E5] pt-10">
-      <SectionHeader title="Questions Decision-Makers Ask" />
+      <SectionHeader
+        title="Questions Decision-Makers Ask"
+        action={<SeeAllLink label="Full FAQ" to={HOME_ROUTES.faq} />}
+      />
       <div className="space-y-3 max-w-3xl">
-        {FAQS.map((q) => (
-          <button
-            key={q}
-            type="button"
-            className="w-full bg-white border border-[#E5E5E5] p-4 md:p-5 rounded-xl text-left hover:border-primary transition-colors flex items-center justify-between gap-4"
-          >
-            <span className="text-sm font-bold text-black">{q}</span>
-            <Icon name="add" className="text-primary shrink-0" />
-          </button>
+        {FAQS.map((q, i) => (
+          <div key={q} className="bg-white border border-[#E5E5E5] rounded-xl overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setOpen(open === i ? null : i)}
+              className="w-full p-4 md:p-5 text-left hover:border-primary transition-colors flex items-center justify-between gap-4"
+            >
+              <span className="text-sm font-bold text-black">{q}</span>
+              <Icon name={open === i ? 'expand_less' : 'add'} className="text-primary shrink-0" />
+            </button>
+            {open === i && (
+              <div className="px-4 md:px-5 pb-4 text-sm text-black leading-relaxed border-t border-[#f0f0f0] pt-3">
+                <Link to={HOME_ROUTES.faq} className="text-primary font-semibold hover:underline">
+                  Read the full answer on our FAQ page →
+                </Link>
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </section>
