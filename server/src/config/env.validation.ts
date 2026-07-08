@@ -6,9 +6,9 @@ class EnvironmentVariables {
   @IsNotEmpty()
   NODE_ENV!: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  PORT!: string;
+  PORT?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -53,13 +53,17 @@ class EnvironmentVariables {
 
 export function validateEnv(config: Record<string, unknown>) {
   const withDefaults = {
-    NODE_ENV: 'development',
-    PORT: '4000',
+    NODE_ENV: 'production',
     API_PREFIX: 'api',
     APP_VERSION: '0.1.0',
     SUPABASE_STORAGE_BUCKET: 'product-images',
     ...config,
   };
+
+  // Hostinger injects PORT at runtime — never default over it.
+  if (!withDefaults.PORT && process.env.PORT) {
+    withDefaults.PORT = process.env.PORT;
+  }
 
   const validated = plainToInstance(EnvironmentVariables, withDefaults, {
     enableImplicitConversion: true,

@@ -29,7 +29,7 @@ loadEnvFile(path.join(serverDir, '.env'));
 loadEnvFile(path.join(root, '.env'));
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production';
-if (!process.env.PORT) process.env.PORT = '4000';
+// Do NOT set PORT — Hostinger injects it. Wrong port = 503.
 if (!process.env.API_PREFIX) process.env.API_PREFIX = 'api';
 if (!process.env.APP_VERSION) process.env.APP_VERSION = '0.1.0';
 
@@ -42,7 +42,14 @@ if (!fs.existsSync(mainJs)) {
 console.log('[index] repo root=', root);
 console.log('[index] server/node_modules=', fs.existsSync(path.join(serverDir, 'node_modules')));
 console.log('[index] DATABASE_URL=', process.env.DATABASE_URL ? 'set' : 'MISSING');
-console.log('[index] PORT=', process.env.PORT);
+console.log('[index] PORT=', process.env.PORT ?? '(Hostinger will inject)');
 
 process.chdir(serverDir);
-require(mainJs);
+
+try {
+  require(mainJs);
+} catch (err) {
+  console.error('[index] Failed to start NestJS:');
+  console.error(err);
+  process.exit(1);
+}

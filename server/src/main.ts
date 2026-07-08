@@ -25,7 +25,7 @@ async function bootstrap() {
   const config = app.get(ConfigService);
 
   const apiPrefix = config.get<string>('app.apiPrefix', 'api');
-  const port = config.get<number>('app.port', 4000);
+  const port = Number(process.env.PORT) || config.get<number>('app.port', 4000);
   const nodeEnv = config.get<string>('app.nodeEnv', 'development');
 
   app.setGlobalPrefix(apiPrefix);
@@ -53,8 +53,8 @@ async function bootstrap() {
     logger.warn('client/dist not found — API only mode');
   }
 
-  await app.listen(port, '0.0.0.0');
-  logger.log(`LeafyLand running on http://0.0.0.0:${port} (API: /${apiPrefix})`);
+  await app.listen(port);
+  logger.log(`LeafyLand running on port ${port} (API: /${apiPrefix})`);
 }
 
 bootstrap().catch((err: unknown) => {

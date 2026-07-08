@@ -40,6 +40,16 @@ Required keys:
 
 Do **not** set `PORT` — Hostinger assigns it automatically.
 
+## 503 Service Unavailable?
+
+The build succeeded but Node crashed or wrong port. Fix:
+
+1. **New site?** Re-import env vars (each Hostinger site needs its own import)
+2. hPanel → **Deployments → Runtime logs** — look for `[index] Failed` or `DATABASE_URL= MISSING`
+3. Click **Restart** (next to Running) after saving env vars
+4. Confirm **Entry file** = `index.js`, **Start** = `npm start`
+5. Remove `PORT` from env vars if you added it manually
+
 ## After redeploy
 
 - Site: https://lavender-fox-532363.hostingersite.com

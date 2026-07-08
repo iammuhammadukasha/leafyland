@@ -33,7 +33,6 @@ if (!existsSync(clientEnvPath)) {
 
 const serverKeys = [
   'NODE_ENV',
-  'PORT',
   'API_PREFIX',
   'APP_VERSION',
   'DATABASE_URL',

@@ -32,6 +32,7 @@ const map = Object.fromEntries(
 );
 
 map.NODE_ENV = 'production';
+delete map.PORT; // Hostinger assigns PORT — do not import
 if (!map.VITE_SUPABASE_URL && map.SUPABASE_URL) {
   map.VITE_SUPABASE_URL = map.SUPABASE_URL;
 }
