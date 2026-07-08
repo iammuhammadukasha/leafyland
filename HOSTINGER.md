@@ -27,10 +27,10 @@ If Hostinger does not auto-detect, use:
 | **Root directory** | `.` (repository root) |
 | **Install command** | `npm install` (runs `postinstall` → installs `server/` + `client/` deps) |
 | **Build command** | `npm run build` |
-| **Start command** | `npm run start` |
-| **Framework** | NestJS (if asked) |
-| **Output directory** | `.` (repo root — keeps `server/node_modules` available) |
-| **Entry file** | `server/dist/start-hostinger.js` |
+| **Start command** | `npm start` |
+| **Framework** | Other (if NestJS auto-detect causes issues) |
+| **Output directory** | `.` |
+| **Entry file** | `index.js` |
 | **Start command** | `node server/dist/start-hostinger.js` |
 
 Equivalent scripts in `package.json`:
@@ -38,7 +38,7 @@ Equivalent scripts in `package.json`:
 ```bash
 npm install              # postinstall → server + client (incl. TypeScript/Vite)
 npm run build            # prisma generate, client env, build client + server
-npm start                # node server/dist/start-hostinger.js
+npm start                # node index.js (committed entry — loads server/dist/main.js)
 ```
 
 ### 3. Environment variables (one-time import)
