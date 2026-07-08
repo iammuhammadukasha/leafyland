@@ -47,7 +47,7 @@ In hPanel → your Node.js app → **Environment Variables**, add (copy values f
 | Variable | Required | Example / notes |
 |----------|----------|-----------------|
 | `NODE_ENV` | Yes | `production` |
-| `PORT` | Yes | `4000` (Hostinger may override — keep this) |
+| `PORT` | Optional | Leave unset — Hostinger assigns this automatically. Only set if runtime logs show a port error. |
 | `API_PREFIX` | Yes | `api` |
 | `APP_VERSION` | Yes | `0.1.0` |
 | `DATABASE_URL` | Yes | Supabase pooler URL (port 6543) |

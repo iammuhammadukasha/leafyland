@@ -67,7 +67,12 @@ export function validateEnv(config: Record<string, unknown>) {
 
   const errors = validateSync(validated, { skipMissingProperties: false });
   if (errors.length > 0) {
-    throw new Error(errors.toString());
+    const missing = errors
+      .flatMap((e) => Object.values(e.constraints ?? {}))
+      .join('; ');
+    throw new Error(
+      `Missing or invalid environment variables: ${missing}. Set them in Hostinger hPanel → Environment variables.`,
+    );
   }
   return validated;
 }
