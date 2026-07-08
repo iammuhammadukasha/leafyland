@@ -29,15 +29,16 @@ If Hostinger does not auto-detect, use:
 | **Build command** | `npm run build` |
 | **Start command** | `npm run start` |
 | **Framework** | NestJS (if asked) |
-| **Output directory** | `server/dist` |
-| **Entry file** | `main.js` |
+| **Output directory** | `.` (repo root — keeps `server/node_modules` available) |
+| **Entry file** | `server/dist/start-hostinger.js` |
+| **Start command** | `node server/dist/start-hostinger.js` |
 
 Equivalent scripts in `package.json`:
 
 ```bash
 npm install              # postinstall → server + client (incl. TypeScript/Vite)
 npm run build            # prisma generate, client env, build client + server
-npm start                # node server/dist/main.js
+npm start                # node server/dist/start-hostinger.js
 ```
 
 ### 3. Environment variables (one-time import)
@@ -121,7 +122,7 @@ You can keep [leafyland.vercel.app](https://leafyland.vercel.app) as a backup un
 | API 404 | Confirm `API_PREFIX=api` and routes use `/api/...` |
 | DB connection error | Verify `DATABASE_URL` uses Supabase **pooler** (6543) with `?pgbouncer=true` |
 | `tsc: command not found` | Ensure latest code is deployed; root `postinstall` must install `client/` devDependencies |
-| Build succeeds but deploy fails | App crashed on startup — open **Runtime logs** and check env vars below |
+| Build succeeds but deploy fails | Set **Output directory** to `.` and **Start** to `node server/dist/start-hostinger.js` — not `npm run start` with output `server/dist` |
 | Missing env vars at startup | Set `NODE_ENV`, `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` in hPanel |
 | Domain not working | Wait for transfer; check DNS points to Hostinger |
 

@@ -27,10 +27,22 @@ writeFileSync(
   distEntry,
   `'use strict';
 const path = require('path');
+const fs = require('fs');
 const { config } = require('dotenv');
 
-config({ path: path.join(__dirname, 'hostinger.runtime.env') });
-require('./main.js');
+const distDir = __dirname;
+const serverDir = path.join(distDir, '..');
+const repoRoot = path.join(serverDir, '..');
+
+console.log('[hostinger] boot cwd=', process.cwd());
+console.log('[hostinger] dist=', distDir);
+console.log('[hostinger] server/node_modules=', fs.existsSync(path.join(serverDir, 'node_modules')));
+
+config({ path: path.join(distDir, 'hostinger.runtime.env') });
+
+// Run from server/ so node_modules and prisma client resolve correctly.
+process.chdir(serverDir);
+require(path.join(distDir, 'main.js'));
 `,
   'utf8',
 );
