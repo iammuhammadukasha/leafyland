@@ -40,9 +40,16 @@ npm run build            # prisma generate, client env, build client + server
 npm start                # node server/dist/main.js
 ```
 
-### 3. Environment variables
+### 3. Environment variables (one-time import)
 
-In hPanel → your Node.js app → **Environment Variables**, add (copy values from `server/.env` — **never commit `.env`**):
+**Required once** — the build writes `server/.env` from these at deploy time.
+
+1. On your PC, from repo root: `npm run hostinger-import`  
+   → creates `deploy/hostinger-import.env` (gitignored, contains your secrets)
+2. In hPanel → **Environment variables** → **Import .env** → upload `deploy/hostinger-import.env`
+3. Redeploy
+
+Or add manually in hPanel (copy values from `server/.env` — **never commit `.env`**):
 
 | Variable | Required | Example / notes |
 |----------|----------|-----------------|
@@ -114,7 +121,8 @@ You can keep [leafyland.vercel.app](https://leafyland.vercel.app) as a backup un
 | API 404 | Confirm `API_PREFIX=api` and routes use `/api/...` |
 | DB connection error | Verify `DATABASE_URL` uses Supabase **pooler** (6543) with `?pgbouncer=true` |
 | `tsc: command not found` | Ensure latest code is deployed; root `postinstall` must install `client/` devDependencies |
-| Auth broken / Supabase warning in browser | Set `VITE_SUPABASE_ANON_KEY` in hPanel before deploy; rebuild |
+| Build succeeds but deploy fails | App crashed on startup — open **Runtime logs** and check env vars below |
+| Missing env vars at startup | Set `NODE_ENV`, `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` in hPanel |
 | Domain not working | Wait for transfer; check DNS points to Hostinger |
 
 ## Seed database (one-time)

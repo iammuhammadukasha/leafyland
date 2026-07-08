@@ -1,12 +1,17 @@
 import 'reflect-metadata';
+import { config as loadEnv } from 'dotenv';
+import { join } from 'path';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import type { NextFunction, Request, Response } from 'express';
-import { join } from 'path';
 import { AppModule } from './app.module';
 import { resolveClientDist } from './static/client-dist';
+
+// Load server/.env before Nest boot (Hostinger cwd is often repo root).
+loadEnv({ path: join(__dirname, '..', '.env') });
+loadEnv({ path: join(process.cwd(), 'server', '.env') });
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

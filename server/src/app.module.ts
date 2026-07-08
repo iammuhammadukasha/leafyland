@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { join } from 'path';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import { validateEnv } from './config/env.validation';
@@ -20,7 +21,12 @@ import supabaseConfig from './config/supabase.config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.local', '.env'],
+      envFilePath: [
+        join(__dirname, '..', '.env'),
+        join(__dirname, '..', '.env.local'),
+        join(process.cwd(), 'server', '.env'),
+        join(process.cwd(), '.env'),
+      ],
       load: [appConfig, databaseConfig, supabaseConfig],
       validate: validateEnv,
     }),

@@ -9,15 +9,16 @@
     "dev:client": "npm run dev --prefix client",
     "dev:server": "npm run dev --prefix server",
     "postinstall": "npm install --prefix server --include=dev && npm install --prefix client --include=dev",
-    "build": "npm run db:generate --prefix server && node scripts/hostinger-client-env.mjs && npm run build --prefix client && npm run build --prefix server && node scripts/verify-hostinger-build.mjs",
+    "build": "npm run db:generate --prefix server && node scripts/hostinger-env.mjs && npm run build --prefix client && npm run build --prefix server && node scripts/bundle-client-for-server.mjs && node scripts/verify-hostinger-build.mjs",
     "build:server": "npm run build --prefix server",
-    "start": "node scripts/check-runtime-env.mjs && node server/dist/main.js",
+    "start": "node server/dist/main.js",
     "hostinger-build": "npm run build",
     "hostinger-start": "npm run start:prod --prefix server",
     "db:push": "npm run db:push --prefix server",
     "db:seed": "npm run db:seed --prefix server",
     "db:generate": "npm run db:generate --prefix server",
     "setup:supabase": "node scripts/complete-supabase-setup.mjs",
+    "hostinger-import": "node scripts/generate-hostinger-import.mjs",
     "vercel-build": "npm install --prefix server --include=dev && npm run db:generate --prefix server && npm install --prefix client --include=dev && npm run build --prefix client"
   },
   "devDependencies": {
