@@ -6,7 +6,7 @@ const checks = [
   ['client/dist/index.html', join(root, 'client', 'dist', 'index.html')],
   ['server/dist/main.js', join(root, 'server', 'dist', 'main.js')],
   ['server/dist/public/index.html', join(root, 'server', 'dist', 'public', 'index.html')],
-  ['server/dist/start-hostinger.js', join(root, 'server', 'dist', 'start-hostinger.js')],
+  ['server/dist/env.config.js', join(root, 'server/dist/env.config.js')],
   ['index.js', join(root, 'index.js')],
 ];
 

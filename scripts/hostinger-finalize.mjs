@@ -1,52 +1,61 @@
 /**
- * Finalize Hostinger deploy: bundle runtime env + startup entry inside server/dist.
+ * Finalize Hostinger deploy: bake env into dist + startup helpers.
  */
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { cpSync, existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 const root = process.cwd();
 const serverEnv = join(root, 'server', '.env');
 const distDir = join(root, 'server', 'dist');
 const runtimeEnv = join(distDir, 'hostinger.runtime.env');
-const distEntry = join(distDir, 'start-hostinger.js');
+const envConfigJs = join(distDir, 'env.config.js');
 
 if (!existsSync(join(distDir, 'main.js'))) {
   console.error('hostinger-finalize: server/dist/main.js missing — run server build first');
   process.exit(1);
 }
 
+const envObj = {};
+const serverKeys = [
+  'NODE_ENV', 'API_PREFIX', 'APP_VERSION', 'DATABASE_URL', 'DIRECT_URL',
+  'SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_STORAGE_BUCKET',
+  'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET', 'GSTIN',
+];
+
 if (existsSync(serverEnv)) {
-  const raw = readEnvWithoutPort(serverEnv);
-  writeFileSync(runtimeEnv, raw, 'utf8');
+  for (const line of readFileSync(serverEnv, 'utf8').split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) continue;
+    const eq = trimmed.indexOf('=');
+    if (eq < 0) continue;
+    const key = trimmed.slice(0, eq);
+    if (key === 'PORT') continue;
+    envObj[key] = trimmed.slice(eq + 1);
+  }
+  writeFileSync(runtimeEnv, readEnvWithoutPort(serverEnv), 'utf8');
   console.log(`hostinger-finalize: wrote ${runtimeEnv}`);
 } else {
-  console.warn('hostinger-finalize: server/.env not found — relying on hPanel runtime env vars');
+  for (const key of serverKeys) {
+    if (process.env[key]) envObj[key] = process.env[key];
+  }
 }
 
 writeFileSync(
-  distEntry,
+  envConfigJs,
   `'use strict';
-const path = require('path');
-const fs = require('fs');
-const { config } = require('dotenv');
-
-const distDir = __dirname;
-const serverDir = path.join(distDir, '..');
-const repoRoot = path.join(serverDir, '..');
-
-console.log('[hostinger] boot cwd=', process.cwd());
-console.log('[hostinger] dist=', distDir);
-console.log('[hostinger] server/node_modules=', fs.existsSync(path.join(serverDir, 'node_modules')));
-
-config({ path: path.join(distDir, 'hostinger.runtime.env') });
-
-// Run from server/ so node_modules and prisma client resolve correctly.
-process.chdir(serverDir);
-require(path.join(distDir, 'main.js'));
+module.exports = ${JSON.stringify(envObj, null, 2)};
 `,
   'utf8',
 );
-console.log(`hostinger-finalize: wrote ${distEntry}`);
+console.log(`hostinger-finalize: wrote ${envConfigJs}`);
+
+// Prisma schema for runtime (if needed by tooling).
+const prismaDir = join(root, 'server', 'prisma');
+const distPrisma = join(distDir, 'prisma');
+if (existsSync(prismaDir)) {
+  cpSync(prismaDir, distPrisma, { recursive: true });
+  console.log('hostinger-finalize: copied server/prisma → server/dist/prisma');
+}
 
 function readEnvWithoutPort(filePath) {
   const lines = [];
