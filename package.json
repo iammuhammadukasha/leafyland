@@ -11,7 +11,7 @@
     "postinstall": "npm install --prefix server --include=dev && npm install --prefix client --include=dev",
     "build": "npm run db:generate --prefix server && node scripts/hostinger-env.mjs && npm run build --prefix client && npm run build --prefix server && node scripts/bundle-client-for-server.mjs && node scripts/hostinger-finalize.mjs && node scripts/verify-hostinger-build.mjs",
     "build:server": "npm run build --prefix server",
-    "start": "node app.js",
+    "start": "node server/dist/main.js",
     "hostinger-build": "npm run build",
     "hostinger-start": "npm run start:prod --prefix server",
     "db:push": "npm run db:push --prefix server",
