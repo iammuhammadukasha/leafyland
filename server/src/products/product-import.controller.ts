@@ -1,6 +1,7 @@
 import { BadRequestException, Controller, Get, Header, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
+import type { Express } from 'express';
 import { UserRole } from '../common/enums';
 import { JwtAuthGuard, Roles, RolesGuard } from '../auth/guards';
 import { ProductImportService } from './product-import.service';

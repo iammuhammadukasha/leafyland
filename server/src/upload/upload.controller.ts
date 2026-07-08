@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
+import type { Express } from 'express';
 import { extname } from 'path';
 import { UserRole } from '../common/enums';
 import { SupabaseAuthGuard, Roles, RolesGuard } from '../auth/guards';

@@ -29,6 +29,7 @@ If Hostinger does not auto-detect, use:
 | **Build command** | `npm run build` |
 | **Start command** | `npm run start` |
 | **Framework** | NestJS (if asked) |
+| **Output directory** | `server/dist` |
 | **Entry file** | `server/dist/main.js` (if asked) |
 
 Equivalent scripts in `package.json`:
