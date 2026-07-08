@@ -9,14 +9,20 @@ import type { NextFunction, Request, Response } from 'express';
 import { AppModule } from './app.module';
 import { resolveClientDist } from './static/client-dist';
 
-// Load server/.env before Nest boot (Hostinger cwd is often repo root).
+// Load persisted Hostinger env (not stripped like .env) before Nest boot.
+loadEnv({ path: join(__dirname, 'hostinger.runtime.env') });
+loadEnv({ path: join(__dirname, '.env') });
 loadEnv({ path: join(__dirname, '..', '.env') });
 loadEnv({ path: join(process.cwd(), 'server', '.env') });
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
+  logger.log(
+    `Env check: NODE_ENV=${process.env.NODE_ENV ?? 'unset'} PORT=${process.env.PORT ?? 'unset'} DB=${process.env.DATABASE_URL ? 'set' : 'missing'}`,
+  );
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService);
-  const logger = new Logger('Bootstrap');
 
   const apiPrefix = config.get<string>('app.apiPrefix', 'api');
   const port = config.get<number>('app.port', 4000);
