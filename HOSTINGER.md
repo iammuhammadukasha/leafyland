@@ -17,25 +17,23 @@ LeafyLand runs as **one Node.js app**: NestJS serves the API at `/api` and the R
 2. If a default site already uses your domain, remove it first (download a backup if needed).
 3. Connect **GitHub** (recommended) or upload a **ZIP** of the repo (exclude `node_modules`, `.env`).
 
-### 2. Build & start commands
-
-If Hostinger does not auto-detect, use:
+### 2. Build & start commands (fixed — do not change)
 
 | Setting | Value |
 |---------|--------|
 | **Node.js version** | 22.x (or 20.x) |
-| **Root directory** | `.` (repository root) |
-| **Install command** | `npm install` (runs `postinstall` → installs `server/` + `client/` deps) |
+| **Root directory** | `.` |
+| **Install command** | `npm install` |
 | **Build command** | `npm run build` |
-| **Output directory** | `server/dist` |
+| **Output directory** | `release` |
 | **Entry file** | `app.js` |
 
-Equivalent scripts in `package.json`:
+See **[HOSTINGER-SETTINGS.md](HOSTINGER-SETTINGS.md)** for the full one-time setup.
 
 ```bash
-npm install              # postinstall → server + client (incl. TypeScript/Vite)
-npm run build            # prisma generate, client env, build client + server
-npm start                # node server/dist/app.js (local)
+npm install    # postinstall → server + client deps
+npm run build  # assembles release/ for Hostinger
+npm start      # node release/app.js (local test after build)
 ```
 
 ### 3. Environment variables (one-time import)

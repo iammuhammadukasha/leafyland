@@ -1,30 +1,30 @@
-# Hostinger settings (no Start command field needed)
+# Hostinger — set ONCE, never change again
 
-Hostinger only needs **Entry file** — it runs that file with Node automatically.
-
-**Deployments → Settings and redeploy**
-
-| Field | Value |
-|-------|--------|
-| Framework | **Other** |
-| Node.js | **22.x** |
-| Root directory | `.` |
-| Install command | `npm install` |
-| Build command | `npm run build` |
-| **Output directory** | `server/dist` |
+| Setting | Value |
+|---------|--------|
+| **Output directory** | `release` |
 | **Entry file** | `app.js` |
+| **Build command** | `npm run build` |
+| **Install command** | `npm install` |
+| **Framework** | Other |
+| **Node** | 22.x |
 
-There is **no separate Start command** on Hostinger — **Entry file = `app.js`** is how the app starts.
+`release/app.js` is committed to Git — Hostinger always uses this entry.
+`npm run build` fills `release/` with `main.js`, `public/`, `node_modules/`, env.
 
-## Environment variables
+## Environment variables (one-time per site)
 
-Import once per site: `deploy/hostinger-import.env`  
-Generate locally: `npm run hostinger-import`
+```powershell
+npm run hostinger-import
+```
 
-**Do not set PORT** in env vars.
+hPanel → Environment variables → Import → `deploy/hostinger-import.env`
 
-## After deploy shows "Completed"
+Required: `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `VITE_SUPABASE_ANON_KEY`
 
-1. https://paleturquoise-trout-180752.hostingersite.com
-2. https://paleturquoise-trout-180752.hostingersite.com/api/health
-3. Still 503? → **Runtime logs** in left sidebar
+Do **not** set `PORT`.
+
+## Troubleshooting
+
+- **503** → Runtime logs (sidebar). Look for `[app] DATABASE_URL= MISSING`
+- **Build failed but logs OK** → confirm Output=`release`, Entry=`app.js`

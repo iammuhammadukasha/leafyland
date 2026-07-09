@@ -5,6 +5,7 @@ import { join } from 'path';
 export function resolveClientDist(): string | null {
   const candidates = [
     join(__dirname, 'public'),
+    join(process.cwd(), 'release', 'public'),
     join(process.cwd(), 'server', 'dist', 'public'),
     join(process.cwd(), 'client', 'dist'),
     join(process.cwd(), '..', 'client', 'dist'),
