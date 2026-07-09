@@ -28,7 +28,7 @@ import supabaseConfig from './config/supabase.config';
         join(process.cwd(), '.env'),
       ],
       load: [appConfig, databaseConfig, supabaseConfig],
-      validate: validateEnv,
+      ...(process.env.NODE_ENV !== 'production' && { validate: validateEnv }),
     }),
     SupabaseModule,
     PrismaModule,

@@ -53,8 +53,9 @@ async function bootstrap() {
     logger.warn('client/dist not found — API only mode');
   }
 
-  await app.listen(port);
-  logger.log(`LeafyLand listening on port ${port} (API: /${apiPrefix})`);
+  await app.listen(port, () => {
+    logger.log(`LeafyLand listening on port ${port} (API: /${apiPrefix})`);
+  });
 }
 
 bootstrap().catch((err: unknown) => {

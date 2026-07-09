@@ -13,9 +13,13 @@ export class SupabaseService {
     this.bucket = config.get<string>('supabase.storageBucket', 'product-images');
 
     if (!url || !key) {
-      throw new Error(
-        'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required. See docs/SUPABASE-SETUP.md',
+      console.warn(
+        '[Supabase] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing — auth/upload API disabled',
       );
+      this.admin = createClient('https://placeholder.supabase.co', 'placeholder', {
+        auth: { autoRefreshToken: false, persistSession: false },
+      });
+      return;
     }
 
     this.admin = createClient(url, key, {

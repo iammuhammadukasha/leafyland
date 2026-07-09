@@ -29,10 +29,11 @@ if (!fs.existsSync(mainJs)) {
   process.exit(1);
 }
 
-console.log('[app] LeafyLand starting');
+console.log('[app] LeafyLand starting at', new Date().toISOString());
 console.log('[app] cwd=', process.cwd());
 console.log('[app] PORT=', process.env.PORT ?? 'unset');
 console.log('[app] DATABASE_URL=', process.env.DATABASE_URL ? 'set' : 'MISSING');
+console.log('[app] SUPABASE_URL=', process.env.SUPABASE_URL ? 'set' : 'MISSING');
 
 process.on('uncaughtException', (err) => {
   console.error('[app] uncaughtException:', err);
@@ -44,8 +45,10 @@ process.on('unhandledRejection', (err) => {
 });
 
 try {
+  console.log('[app] loading NestJS main.js...');
   require('reflect-metadata');
   require(mainJs);
+  console.log('[app] main.js loaded');
 } catch (err) {
   console.error('[app] boot failed:', err);
   process.exit(1);
