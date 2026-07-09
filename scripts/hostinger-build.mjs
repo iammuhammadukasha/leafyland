@@ -38,12 +38,13 @@ if (!existsSync(join(clientDist, 'index.html'))) {
 }
 
 // 3) Assemble release/ (keep committed release/app.js)
-for (const name of ['main.js', 'public', 'node_modules', 'package.json', 'package-lock.json', 'env.config.js', 'prisma']) {
+for (const name of ['dist', 'public', 'node_modules', 'package.json', 'package-lock.json', 'env.config.js', 'prisma']) {
   const p = join(release, name);
   if (existsSync(p)) rmSync(p, { recursive: true, force: true });
 }
 
-cpSync(join(serverDist, 'main.js'), join(release, 'main.js'));
+// NestJS compiles to many files — main.js alone cannot boot (requires ./app.module, etc.)
+cpSync(serverDist, join(release, 'dist'), { recursive: true });
 cpSync(clientDist, join(release, 'public'), { recursive: true });
 cpSync(join(root, 'server', 'prisma'), join(release, 'prisma'), { recursive: true });
 
@@ -88,7 +89,14 @@ run('npx prisma generate', { cwd: release });
 mkdirSync(join(release, 'uploads'), { recursive: true });
 
 // 6) Verify
-const required = ['app.js', 'main.js', 'public/index.html', 'env.config.js', 'node_modules'];
+const required = [
+  'app.js',
+  'dist/main.js',
+  'dist/app.module.js',
+  'public/index.html',
+  'env.config.js',
+  'node_modules',
+];
 for (const rel of required) {
   if (!existsSync(join(release, ...rel.split('/')))) {
     console.error(`hostinger-build: missing release/${rel}`);

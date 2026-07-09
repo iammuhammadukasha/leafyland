@@ -4,7 +4,9 @@ import { join } from 'path';
 /** Resolve Vite build output whether cwd is repo root or server/. */
 export function resolveClientDist(): string | null {
   const candidates = [
+    join(__dirname, '..', 'public'),
     join(__dirname, 'public'),
+    join(process.cwd(), 'public'),
     join(process.cwd(), 'release', 'public'),
     join(process.cwd(), 'server', 'dist', 'public'),
     join(process.cwd(), 'client', 'dist'),

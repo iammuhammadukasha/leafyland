@@ -23,9 +23,9 @@ if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production';
 if (!process.env.API_PREFIX) process.env.API_PREFIX = 'api';
 if (!process.env.APP_VERSION) process.env.APP_VERSION = '0.1.0';
 
-const mainJs = path.join(__dirname, 'main.js');
+const mainJs = path.join(__dirname, 'dist', 'main.js');
 if (!fs.existsSync(mainJs)) {
-  console.error('[app] main.js missing — run: npm run build');
+  console.error('[app] dist/main.js missing — run: npm run build');
   process.exit(1);
 }
 
