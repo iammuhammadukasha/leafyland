@@ -85,6 +85,8 @@ writeFileSync(
 run('npm install --omit=dev', { cwd: release });
 run('npx prisma generate', { cwd: release });
 
+mkdirSync(join(release, 'uploads'), { recursive: true });
+
 // 6) Verify
 const required = ['app.js', 'main.js', 'public/index.html', 'env.config.js', 'node_modules'];
 for (const rel of required) {
