@@ -6,6 +6,11 @@
 const fs = require('fs');
 const path = require('path');
 
+// Diagnostic probe: synchronous write, guaranteed to flush even if the
+// process is killed immediately after. If this never appears in Hostinger's
+// logs, the launcher isn't invoking this file at all.
+fs.writeSync(1, `[app] PROBE boot at ${new Date().toISOString()} pid=${process.pid} cwd=${process.cwd()}\n`);
+
 function applyEnv() {
   const envPath = path.join(__dirname, 'env.config.js');
   if (!fs.existsSync(envPath)) return;
