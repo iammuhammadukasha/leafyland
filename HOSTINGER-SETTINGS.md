@@ -9,7 +9,7 @@
 | Root directory | `.` |
 | Install command | `npm install` |
 | Build command | `npm run build` |
-| **Start command** | `npm start` |
+| **Start command** | `node start.js` |
 | **Output directory** | `server/dist` |
 | **Entry file** | `start.js` |
 

@@ -27,7 +27,7 @@ If Hostinger does not auto-detect, use:
 | **Root directory** | `.` (repository root) |
 | **Install command** | `npm install` (runs `postinstall` → installs `server/` + `client/` deps) |
 | **Build command** | `npm run build` |
-| **Start command** | `npm start` |
+| **Start command** | `node start.js` |
 | **Framework** | Other |
 | **Output directory** | `server/dist` |
 | **Entry file** | `start.js` |
@@ -37,7 +37,7 @@ Equivalent scripts in `package.json`:
 ```bash
 npm install              # postinstall → server + client (incl. TypeScript/Vite)
 npm run build            # prisma generate, client env, build client + server
-npm start                # npm start in server/dist (standalone runtime package)
+npm start                # node server/dist/start.js (local); on Hostinger use: node start.js
 ```
 
 ### 3. Environment variables (one-time import)
