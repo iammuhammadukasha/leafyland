@@ -1,3 +1,4 @@
+console.log('app started');
 'use strict';
 /**
  * PERMANENT Hostinger entry — do not change Entry file in hPanel (always app.js).
