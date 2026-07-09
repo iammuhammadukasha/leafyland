@@ -68,5 +68,18 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
+try {
+  const db = new URL(process.env.DATABASE_URL);
+  if (db.hostname.includes('pooler.supabase.com') && db.username === 'postgres') {
+    console.error(
+      'hostinger-env: DATABASE_URL username is "postgres" but Supabase pooler requires postgres.YOUR_PROJECT_REF — copy the URI from Supabase → Database → Connection string',
+    );
+    process.exit(1);
+  }
+} catch {
+  console.error('hostinger-env: DATABASE_URL is not a valid URL');
+  process.exit(1);
+}
+
 writeFileSync(serverEnvPath, `${serverLines.join('\n')}\n`, 'utf8');
 console.log(`hostinger-env: wrote ${serverEnvPath}`);

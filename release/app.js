@@ -35,6 +35,21 @@ console.log('[app] PORT=', process.env.PORT ?? 'unset');
 console.log('[app] DATABASE_URL=', process.env.DATABASE_URL ? 'set' : 'MISSING');
 console.log('[app] SUPABASE_URL=', process.env.SUPABASE_URL ? 'set' : 'MISSING');
 
+try {
+  if (process.env.DATABASE_URL) {
+    const db = new URL(process.env.DATABASE_URL);
+    console.log('[app] DATABASE_URL host=', db.host);
+    console.log('[app] DATABASE_URL user=', db.username);
+    if (db.hostname.includes('pooler.supabase.com') && db.username === 'postgres') {
+      console.error(
+        '[app] DATABASE_URL uses username "postgres" — pooler needs postgres.YOUR_PROJECT_REF (copy URI from Supabase dashboard)',
+      );
+    }
+  }
+} catch {
+  console.error('[app] DATABASE_URL is not a valid URL');
+}
+
 process.on('uncaughtException', (err) => {
   console.error('[app] uncaughtException:', err);
   process.exit(1);

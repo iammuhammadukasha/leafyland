@@ -38,6 +38,15 @@ try {
 }
 
 console.log(`verify-database-url: testing ${host} ...`);
+console.log(`verify-database-url: user=${new URL(databaseUrl).username}`);
+
+const dbUser = new URL(databaseUrl).username;
+if (host.includes('pooler.supabase.com') && dbUser === 'postgres') {
+  console.error(
+    'verify-database-url: pooler URL must use postgres.YOUR_PROJECT_REF as username, not "postgres"',
+  );
+  process.exit(1);
+}
 
 const pool = new pg.Pool({
   connectionString: databaseUrl,
