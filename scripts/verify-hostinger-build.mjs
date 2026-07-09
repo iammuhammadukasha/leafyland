@@ -5,7 +5,7 @@ const root = process.cwd();
 const dist = join(root, 'server', 'dist');
 const checks = [
   ['server/dist/main.js', join(dist, 'main.js')],
-  ['server/dist/start.js', join(dist, 'start.js')],
+  ['server/dist/app.js', join(dist, 'app.js')],
   ['server/dist/package.json', join(dist, 'package.json')],
   ['server/dist/public/index.html', join(dist, 'public', 'index.html')],
   ['server/dist/env.config.js', join(dist, 'env.config.js')],

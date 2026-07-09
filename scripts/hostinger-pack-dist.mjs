@@ -23,8 +23,8 @@ writeFileSync(
     {
       name: 'leafyland-runtime',
       private: true,
-      main: 'start.js',
-      scripts: { start: 'node start.js' },
+      main: 'app.js',
+      scripts: { start: 'node app.js' },
       dependencies: serverPkg.dependencies,
     },
     null,
@@ -33,7 +33,7 @@ writeFileSync(
 );
 
 writeFileSync(
-  join(distDir, 'start.js'),
+  join(distDir, 'app.js'),
   `'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -75,4 +75,4 @@ execSync('npm install --omit=dev', { cwd: distDir, stdio: 'inherit' });
 console.log('hostinger-pack: prisma generate in server/dist...');
 execSync('npx prisma generate', { cwd: distDir, stdio: 'inherit' });
 
-console.log('hostinger-pack: ready — use output server/dist, entry start.js');
+console.log('hostinger-pack: ready — use output server/dist, entry app.js');

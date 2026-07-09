@@ -1,4 +1,6 @@
-# Hostinger settings — copy EXACTLY
+# Hostinger settings (no Start command field needed)
+
+Hostinger only needs **Entry file** — it runs that file with Node automatically.
 
 **Deployments → Settings and redeploy**
 
@@ -9,24 +11,20 @@
 | Root directory | `.` |
 | Install command | `npm install` |
 | Build command | `npm run build` |
-| **Start command** | `node start.js` |
 | **Output directory** | `server/dist` |
-| **Entry file** | `start.js` |
+| **Entry file** | `app.js` |
+
+There is **no separate Start command** on Hostinger — **Entry file = `app.js`** is how the app starts.
 
 ## Environment variables
 
 Import once per site: `deploy/hostinger-import.env`  
-Generate: `npm run hostinger-import` from repo root.
+Generate locally: `npm run hostinger-import`
 
 **Do not set PORT** in env vars.
 
 ## After deploy shows "Completed"
 
-1. Open https://paleturquoise-trout-180752.hostingersite.com
-2. API test: https://paleturquoise-trout-180752.hostingersite.com/api/health
-3. If 503 → **Runtime logs** (sidebar) and paste errors
-
-## Why server/dist?
-
-Hostinger copies only the **output directory** to the Node runtime.  
-`server/dist` now includes `node_modules`, `start.js`, `main.js`, and `public/`.
+1. https://paleturquoise-trout-180752.hostingersite.com
+2. https://paleturquoise-trout-180752.hostingersite.com/api/health
+3. Still 503? → **Runtime logs** in left sidebar
