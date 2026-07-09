@@ -2,19 +2,21 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 const root = process.cwd();
+const dist = join(root, 'server', 'dist');
 const checks = [
-  ['client/dist/index.html', join(root, 'client', 'dist', 'index.html')],
-  ['server/dist/main.js', join(root, 'server', 'dist', 'main.js')],
-  ['server/dist/public/index.html', join(root, 'server', 'dist', 'public', 'index.html')],
-  ['server/dist/env.config.js', join(root, 'server/dist/env.config.js')],
-  ['index.js', join(root, 'index.js')],
+  ['server/dist/main.js', join(dist, 'main.js')],
+  ['server/dist/start.js', join(dist, 'start.js')],
+  ['server/dist/package.json', join(dist, 'package.json')],
+  ['server/dist/public/index.html', join(dist, 'public', 'index.html')],
+  ['server/dist/env.config.js', join(dist, 'env.config.js')],
+  ['server/dist/node_modules', join(dist, 'node_modules')],
 ];
 
 for (const [label, path] of checks) {
   if (!existsSync(path)) {
-    console.error(`verify-build: missing ${label} (${path})`);
+    console.error(`verify-build: missing ${label}`);
     process.exit(1);
   }
 }
 
-console.log('verify-build: client/dist, server/dist/main.js, server/dist/public OK');
+console.log('verify-build: server/dist runtime package OK');

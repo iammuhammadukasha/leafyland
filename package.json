@@ -1,7 +1,6 @@
 {
   "name": "leafyland",
   "private": true,
-  "main": "index.js",
   "engines": {
     "node": ">=20 <=24"
   },
@@ -10,9 +9,9 @@
     "dev:client": "npm run dev --prefix client",
     "dev:server": "npm run dev --prefix server",
     "postinstall": "npm install --prefix server --include=dev && npm install --prefix client --include=dev",
-    "build": "npm install --prefix server --include=dev && npm install --prefix client --include=dev && npm run db:generate --prefix server && node scripts/hostinger-env.mjs && npm run build --prefix client && npm run build --prefix server && node scripts/bundle-client-for-server.mjs && node scripts/hostinger-finalize.mjs && node scripts/verify-hostinger-build.mjs",
+    "build": "npm install --prefix server --include=dev && npm install --prefix client --include=dev && npm run db:generate --prefix server && node scripts/hostinger-env.mjs && npm run build --prefix client && npm run build --prefix server && node scripts/bundle-client-for-server.mjs && node scripts/hostinger-finalize.mjs && node scripts/hostinger-pack-dist.mjs && node scripts/verify-hostinger-build.mjs",
     "build:server": "npm run build --prefix server",
-    "start": "node index.js",
+    "start": "npm start --prefix server/dist",
     "hostinger-build": "npm run build",
     "hostinger-start": "npm run start:prod --prefix server",
     "db:push": "npm run db:push --prefix server",
@@ -21,24 +20,6 @@
     "setup:supabase": "node scripts/complete-supabase-setup.mjs",
     "hostinger-import": "node scripts/generate-hostinger-import.mjs",
     "vercel-build": "npm install --prefix server --include=dev && npm run db:generate --prefix server && npm install --prefix client --include=dev && npm run build --prefix client"
-  },
-  "dependencies": {
-    "@nestjs/common": "^11.0.12",
-    "@nestjs/config": "^4.0.2",
-    "@nestjs/core": "^11.0.12",
-    "@nestjs/jwt": "^11.0.2",
-    "@nestjs/passport": "^11.0.5",
-    "@nestjs/platform-express": "^11.0.12",
-    "@prisma/client": "^5.22.0",
-    "@supabase/supabase-js": "^2.110.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.1",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1",
-    "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"

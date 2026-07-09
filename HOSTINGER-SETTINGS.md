@@ -1,64 +1,32 @@
-# Hostinger — copy these EXACT settings
+# Hostinger settings — copy EXACTLY
 
-Go to **Websites → lavender-fox-532363 → Deployments → Settings and redeploy**
-
-## Build settings
+**Deployments → Settings and redeploy**
 
 | Field | Value |
-|-------|-------|
-| Framework | **Other** (not Next.js) |
-| Node.js version | **22.x** |
+|-------|--------|
+| Framework | **Other** |
+| Node.js | **22.x** |
 | Root directory | `.` |
 | Install command | `npm install` |
 | Build command | `npm run build` |
 | **Start command** | `npm start` |
-| Output directory | `.` |
-| **Entry file** | `index.js` |
+| **Output directory** | `server/dist` |
+| **Entry file** | `start.js` |
 
-## Environment variables (required)
+## Environment variables
 
-Click **Import .env** and upload:
+Import once per site: `deploy/hostinger-import.env`  
+Generate: `npm run hostinger-import` from repo root.
 
-```
-deploy/hostinger-import.env
-```
+**Do not set PORT** in env vars.
 
-Generate it locally (once):
+## After deploy shows "Completed"
 
-```powershell
-cd C:\Users\Ukasha\repos\leafyland
-npm run hostinger-import
-```
+1. Open https://paleturquoise-trout-180752.hostingersite.com
+2. API test: https://paleturquoise-trout-180752.hostingersite.com/api/health
+3. If 503 → **Runtime logs** (sidebar) and paste errors
 
-Required keys:
-- `NODE_ENV=production`
-- `DATABASE_URL`
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+## Why server/dist?
 
-Do **not** set `PORT` — Hostinger assigns it automatically.
-
-## 503 Service Unavailable?
-
-The build succeeded but Node crashed or wrong port. Fix:
-
-1. **New site?** Re-import env vars (each Hostinger site needs its own import)
-2. hPanel → **Deployments → Runtime logs** — look for `[index] Failed` or `DATABASE_URL= MISSING`
-3. Click **Restart** (next to Running) after saving env vars
-4. Confirm **Entry file** = `index.js`, **Start** = `npm start`
-5. Remove `PORT` from env vars if you added it manually
-
-## After redeploy
-
-- Site: https://lavender-fox-532363.hostingersite.com
-- API: https://lavender-fox-532363.hostingersite.com/api/health
-
-## If still failing
-
-Open **Runtime logs** (not Build logs). Look for:
-```
-[index] DATABASE_URL= set
-LeafyLand running on http://0.0.0.0:...
-```
+Hostinger copies only the **output directory** to the Node runtime.  
+`server/dist` now includes `node_modules`, `start.js`, `main.js`, and `public/`.

@@ -28,16 +28,16 @@ If Hostinger does not auto-detect, use:
 | **Install command** | `npm install` (runs `postinstall` → installs `server/` + `client/` deps) |
 | **Build command** | `npm run build` |
 | **Start command** | `npm start` |
-| **Framework** | Other (if NestJS auto-detect causes issues) |
-| **Output directory** | `.` |
-| **Entry file** | `index.js` |
+| **Framework** | Other |
+| **Output directory** | `server/dist` |
+| **Entry file** | `start.js` |
 
 Equivalent scripts in `package.json`:
 
 ```bash
 npm install              # postinstall → server + client (incl. TypeScript/Vite)
 npm run build            # prisma generate, client env, build client + server
-npm start                # node index.js (committed entry — loads server/dist/main.js)
+npm start                # npm start in server/dist (standalone runtime package)
 ```
 
 ### 3. Environment variables (one-time import)
